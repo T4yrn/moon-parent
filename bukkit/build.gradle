@@ -1,0 +1,73 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    id 'idea'
+    id "java"
+    id "org.jetbrains.kotlin.jvm" version "1.5.31"
+    id "maven-publish"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+}
+
+group = "dev.t4yrn.moon"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation project(":shared")
+
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    implementation "org.reflections:reflections:0.9.11"
+    implementation "com.squareup.okhttp:okhttp:2.7.5"
+
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    compileOnly fileTree(dir: "libs", include: ["*.jar"])
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+kotlin {
+    sourceSets {
+        main {
+            kotlin.srcDirs += "src/main/kotlin"
+        }
+    }
+}
+
+shadowJar {
+    classifier = null
+    exclude '**/*.kotlin_metadata'
+    exclude '**/*.kotlin_module'
+    exclude '**/*.kotlin_builtins'
+    project.configurations.implementation.canBeResolved = true
+    configurations = [project.configurations.implementation]
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+        }
+    }
+}
+
+tasks.withType(Jar).configureEach {
+    destinationDirectory = file("C:\\Users\\le4ndev\\Desktop\\new\\moon-parent\\.exported")
+    archiveName("moon-bukkit-${project.version}.jar")
+}

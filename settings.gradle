@@ -1,0 +1,10 @@
+pluginManagement {
+    plugins {
+        id 'org.jetbrains.kotlin.jvm' version '1.9.21'
+    }
+}
+rootProject.name = "moon-parent"
+include 'bukkit'
+include 'proxy'
+include 'shared'
+

@@ -1,0 +1,4 @@
+allprojects {
+    group = "dev.t4yrn.moon"
+    version = "1.0-SNAPSHOT"
+}
